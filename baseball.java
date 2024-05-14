@@ -1,6 +1,3 @@
-// Online Java Compiler
-// Use this editor to write, compile and run your Java code online
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,8 +7,7 @@ import java.util.stream.Collectors;
 abstract class Game{
 	private int gameCount = 5;
 	public List<Character> answer;
-	public Set<Character> answerSet;	
-	
+
 	public Game(int count){
         setCount(count);
 	}
@@ -22,11 +18,11 @@ abstract class Game{
 	public int getGameCount(){return gameCount;}
 	public void startGame() throws Exception {
 		try {
-			answerSet = new HashSet<>();
-			while (true) {
-				answerSet.add(Integer.toString((int)(Math.random() * 10)).charAt(0));
-
-				if (answerSet.size() == 3) {
+			answer = new ArrayList<>();
+			char[] charArray = Integer.toString((int)(Math.random() * 899999999) + 100000000).toCharArray();
+			for(char item : charArray){
+				answer.add(item);
+				if (new HashSet<>(answer).size() == 3) {
 					System.out.println("Number has been created");
 					break;
 				}
@@ -34,7 +30,7 @@ abstract class Game{
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 }
@@ -44,7 +40,6 @@ class BaseBallGame extends Game {
 		super(count);
 	}
 
-	
 	public void startGame() throws Exception{
 		super.startGame();
 		for(int i=0; i<this.getGameCount(); i++){
@@ -61,26 +56,22 @@ class BaseBallGame extends Game {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			String input = br.readLine();
-			Set<Character> interSection = new HashSet<Character>(answer);
-
+			Set<Character> interSection = new HashSet<>(answer);
 			interSection.retainAll(input.chars()
 					.mapToObj(e->(char)e).collect(Collectors.toSet()));
 
 			int ball = interSection.size();
 			int strike = 0;
+
+			System.out.println("answer: " + answer);
 			System.out.println(interSection);
 			System.out.println(ball);
-
-
-			answer = new ArrayList<Character>(answerSet);
-			System.out.println("answer" + answer);
 
 			for(int i=0; i<answer.size(); i++){
 				if(answer.get(i).equals(input.charAt(i))) {
 					strike++;
 				}
 			}
-
 			ball -= strike;
 
 			System.out.println(strike+"S"+" "+ball+"B");
@@ -90,8 +81,8 @@ class BaseBallGame extends Game {
 			}
 		}
 		catch (IOException e) {
-				System.out.println(e);
-			}
+			System.out.println(e);
+		}
 		return false;
 	}
 }
@@ -101,6 +92,7 @@ class HelloWorld {
         Game game = new BaseBallGame(5);
 		try {
 			game.startGame();
+
 		}catch (Exception e){
 			e.printStackTrace();
 		}
