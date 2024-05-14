@@ -19,12 +19,12 @@ abstract class Game{
 	public void startGame() throws Exception {
 		try {
 			answer = new ArrayList<>();
-			char[] charArray = Integer.toString((int)(Math.random() * 899999999) + 100000000).toCharArray();
-			for(char item : charArray){
+			while(true){
+				char item = Integer.toString((int)(Math.random() * 10)).charAt(0);		
 				if(!answer.contains(item))	
 					answer.add(item);
 
-				if (new HashSet<>(answer).size() == 3) {
+				if (answer.size() == 3) {
 					System.out.println("Number has been created");
 					break;
 				}
@@ -66,9 +66,6 @@ class BaseBallGame extends Game {
 			int strike = 0;
 
 			System.out.println("answer: " + answer);
-			System.out.println(interSection);
-			System.out.println(ball);
-
 			for(int i=0; i<answer.size(); i++){
 				if(answer.get(i).equals(input.charAt(i))) {
 					strike++;
