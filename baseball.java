@@ -21,7 +21,9 @@ abstract class Game{
 			answer = new ArrayList<>();
 			char[] charArray = Integer.toString((int)(Math.random() * 899999999) + 100000000).toCharArray();
 			for(char item : charArray){
-				answer.add(item);
+				if(!answer.contains(item))	
+					answer.add(item);
+
 				if (new HashSet<>(answer).size() == 3) {
 					System.out.println("Number has been created");
 					break;
@@ -87,7 +89,7 @@ class BaseBallGame extends Game {
 	}
 }
 
-class HelloWorld {
+class Play {
 	public static void main(String[] args){
         Game game = new BaseBallGame(5);
 		try {
