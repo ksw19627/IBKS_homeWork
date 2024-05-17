@@ -43,6 +43,8 @@ abstract class Game{
 			System.out.println(e);
 		}
 	}
+
+	abstract boolean gameEnd() throws IOException;
 }
 
 class BaseBallGame extends Game {
@@ -62,6 +64,7 @@ class BaseBallGame extends Game {
 		System.out.println("Game ended");
 	}
 
+	@Override
 	public boolean gameEnd() throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
