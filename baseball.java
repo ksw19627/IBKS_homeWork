@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 abstract class Game{
 	private int gameCount = 5;
+	private int digits = 3;
+
 	public List<Character> answer;
 
 	public Game(int count){
@@ -16,6 +18,12 @@ abstract class Game{
         this.gameCount = count;
 	}
 	public int getGameCount(){return gameCount;}
+
+	public void setDifficulty(int digits){
+		this.digits = digits;
+	}
+	public int getDifficulty(){return digits;}
+
 	public void startGame() throws Exception {
 		try {
 			answer = new ArrayList<>();
@@ -24,7 +32,7 @@ abstract class Game{
 				if(!answer.contains(item))	
 					answer.add(item);
 
-				if (answer.size() == 3) {
+				if (answer.size() == digits) {
 					System.out.println("Number has been created");
 					break;
 				}
@@ -66,7 +74,7 @@ class BaseBallGame extends Game {
 			int strike = 0;
 
 			System.out.println("answer: " + answer);
-			for(int i=0; i<answer.size(); i++){
+			for(int i=0; i<getDifficulty(); i++){
 				if(answer.get(i).equals(input.charAt(i))) {
 					strike++;
 				}
@@ -75,7 +83,7 @@ class BaseBallGame extends Game {
 
 			System.out.println(strike+"S"+" "+ball+"B");
 
-			if(strike == 3){
+			if(strike == getDifficulty()){
 				return true;
 			}
 		}
@@ -89,6 +97,7 @@ class BaseBallGame extends Game {
 class Play {
 	public static void main(String[] args){
         Game game = new BaseBallGame(5);
+		game.setDifficulty(3);
 		try {
 			game.startGame();
 
