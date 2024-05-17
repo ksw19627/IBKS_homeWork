@@ -11,10 +11,10 @@ abstract class Game{
 	public List<Character> answer;
 
 	public Game(int count){
-        setCount(count);
+        setGameCount(count);
 	}
 
-	public void setCount(int count){
+	public void setGameCount(int count){
         this.gameCount = count;
 	}
 	public int getGameCount(){return gameCount;}
@@ -66,6 +66,8 @@ class BaseBallGame extends Game {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			String input = br.readLine();
+			Integer.parseInt(input);
+
 			Set<Character> interSection = new HashSet<>(answer);
 			interSection.retainAll(input.chars()
 					.mapToObj(e->(char)e).collect(Collectors.toSet()));
@@ -87,6 +89,10 @@ class BaseBallGame extends Game {
 				return true;
 			}
 		}
+		catch (NumberFormatException e){
+			System.out.println("The input is not a number. Please check again.");
+			setGameCount(getGameCount() + 1);
+		}
 		catch (IOException e) {
 			System.out.println(e);
 		}
@@ -101,7 +107,8 @@ class Play {
 		try {
 			game.startGame();
 
-		}catch (Exception e){
+		} catch (Exception e){
+
 			e.printStackTrace();
 		}
     }
