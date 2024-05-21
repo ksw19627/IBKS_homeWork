@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringRunner.class) // ①
@@ -22,10 +21,14 @@ public class HelloControllerTest {
     }
     @Test
     public void hello_return() throws Exception {
-        String hello = "hello";
-        mvc.perform(MockMvcRequestBuilders.get("/hello")) // ➄
+        String name = "hello";
+        int amount = 1000;
+
+        mvc.perform(MockMvcRequestBuilders.get("/hello")
+                .param("name", name)
+                .param("amount", String.valueOf(amount)))// ➄
                 .andExpect(status().isOk()) // ➅
-                .andExpect(content().string(hello)); // ➆
+                .andExpect(content().string(name)); // ➆
     }
 }
 

@@ -1,8 +1,10 @@
 package com.cool.web.dto;
 
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
+import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class HelloResponseDtoTest {
+public class HelloResponseDtoTest {
+    @Test
     public void test_lombok(){
         String name = "test";
         int amount = 1000;
@@ -10,7 +12,7 @@ class HelloResponseDtoTest {
         HelloResponseDto dto = new HelloResponseDto(name, amount);
 
         assertThat(dto.getName()).isEqualTo(name);
-        assertThat(dto.getAmount().isEqualTo(amount));
+        assertThat(dto.getAmount()).isEqualTo(amount);
     }
 
 }

@@ -1,5 +1,8 @@
 package com.cool;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,27 +10,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 abstract class Game{
-	private int gameCount = 5;
+	@Setter
+	@Getter
+    private int gameCount = 5;
+	@Setter
+	@Getter
 	private int digits = 3;
 	public List<Character> answer;
 
 	public Game(int count){
         setGameCount(count);
 	}
+
 	public Game(int count, int digits){
 		setGameCount(count);
 		setDigits(digits);
 	}
-	public void setGameCount(int count){
-        this.gameCount = count;
-	}
-	public int getGameCount(){return gameCount;}
-
-	public void setDigits(int digits){
-		this.digits = digits;
-	}
-	public int getDigits(){return digits;}
-
 	abstract void startGame() throws Exception;
 	abstract boolean gameEnd() throws Exception;
 }
@@ -102,6 +100,7 @@ class BaseBallGame extends Game {
 		return false;
 	}
 }
+
 //
 //class Play {
 //	public static void main(String[] args){
