@@ -9,53 +9,51 @@ import java.util.stream.Collectors;
 abstract class Game{
 	private int gameCount = 5;
 	private int digits = 3;
-
 	public List<Character> answer;
 
 	public Game(int count){
         setGameCount(count);
 	}
-
+	public Game(int count, int digits){
+		setGameCount(count);
+		setDigits(digits);
+	}
 	public void setGameCount(int count){
         this.gameCount = count;
 	}
 	public int getGameCount(){return gameCount;}
 
-	public void setDifficulty(int digits){
+	public void setDigits(int digits){
 		this.digits = digits;
 	}
-	public int getDifficulty(){return digits;}
+	public int getDigits(){return digits;}
 
-	public void startGame() throws Exception {
-		try {
-			answer = new ArrayList<>();
-			while(true){
-				char item = Integer.toString((int)(Math.random() * 10)).charAt(0);		
-				if(!answer.contains(item))	
-					answer.add(item);
-
-				if (answer.size() == digits) {
-					System.out.println("Number has been created");
-					break;
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
-	}
-
-	abstract boolean gameEnd() throws IOException;
+	abstract void startGame() throws Exception;
+	abstract boolean gameEnd() throws Exception;
 }
 
 class BaseBallGame extends Game {
-	public BaseBallGame(int count){
-		super(count);
+	public BaseBallGame(int count, int digits){
+		super(count, digits);
 	}
 
+	public void makeNumber(){
+		answer = new ArrayList<>();
+		while(true){
+			char item = Integer.toString((int)(Math.random() * 10)).charAt(0);
+			if(!answer.contains(item))
+				answer.add(item);
+
+			if (answer.size() == getDigits()) {
+				System.out.println("Number has been created");
+				break;
+			}
+		}
+	}
+
+	@Override
 	public void startGame() throws Exception{
-		super.startGame();
+		makeNumber();
 		for(int i=0; i<this.getGameCount(); i++){
 			System.out.println("Your leftCount: " + (getGameCount() - i));
 			if(gameEnd()){
@@ -67,7 +65,7 @@ class BaseBallGame extends Game {
 	}
 
 	@Override
-	public boolean gameEnd() throws IOException{
+	public boolean gameEnd() throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			String input = br.readLine();
@@ -81,7 +79,7 @@ class BaseBallGame extends Game {
 			int strike = 0;
 
 			System.out.println("answer: " + answer);
-			for(int i=0; i<getDifficulty(); i++){
+			for(int i=0; i<getDigits(); i++){
 				if(answer.get(i).equals(input.charAt(i))) {
 					strike++;
 				}
@@ -90,7 +88,7 @@ class BaseBallGame extends Game {
 
 			System.out.println(strike+"S"+" "+ball+"B");
 
-			if(strike == getDifficulty()){
+			if(strike == getDigits()){
 				return true;
 			}
 		}
