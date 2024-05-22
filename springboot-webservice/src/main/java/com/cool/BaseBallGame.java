@@ -1,6 +1,8 @@
 package com.cool;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.BufferedReader;
@@ -9,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 abstract class Game{
 	@Setter
 	@Getter
@@ -16,7 +19,7 @@ abstract class Game{
 	@Setter
 	@Getter
 	private int digits = 3;
-	public List<Character> answer;
+	public String answer;
 
 	public Game(int count){
         setGameCount(count);
@@ -30,19 +33,33 @@ abstract class Game{
 	abstract boolean gameEnd() throws Exception;
 }
 
+@NoArgsConstructor
 class BaseBallGame extends Game {
+
+	@AllArgsConstructor
+	public class GameResult{
+		@Getter
+		private int strike;
+		@Getter
+		private int ball;
+
+		public String toString() {
+			return (strike+"S"+ball+"B");
+		}
+	}
+
 	public BaseBallGame(int count, int digits){
 		super(count, digits);
 	}
 
 	public void makeNumber(){
-		answer = new ArrayList<>();
+		answer = "";
 		while(true){
-			char item = Integer.toString((int)(Math.random() * 10)).charAt(0);
+			CharSequence item = Integer.toString((int)(Math.random() * 10));
 			if(!answer.contains(item))
-				answer.add(item);
+				answer += item;
 
-			if (answer.size() == getDigits()) {
+			if (answer.length() == getDigits()) {
 				System.out.println("Number has been created");
 				break;
 			}
@@ -62,36 +79,49 @@ class BaseBallGame extends Game {
 		System.out.println("Game ended");
 	}
 
+	public GameResult getScore(String given, String input){
+		Set<Character> interSection = new HashSet<>(given.chars()
+				.mapToObj(e->(char)e).collect(Collectors.toSet()));
+		interSection.retainAll(input.chars()
+				.mapToObj(e->(char)e).collect(Collectors.toSet()));
+
+		int ball = interSection.size();
+		int strike = 0;
+
+		//System.out.println("answer: " + given);
+		for(int i=0; i<getDigits(); i++){
+			if(given.charAt(i) == (input.charAt(i))) {
+				strike++;
+			}
+		}
+		ball -= strike;
+
+		return new GameResult(strike,ball);
+	}
+
 	@Override
 	public boolean gameEnd() throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			String input = br.readLine();
+
+			if(input.length() != getDigits()) {
+                throw new IllegalArgumentException();
+			}
 			Integer.parseInt(input);
 
-			Set<Character> interSection = new HashSet<>(answer);
-			interSection.retainAll(input.chars()
-					.mapToObj(e->(char)e).collect(Collectors.toSet()));
+			GameResult gameResult = getScore(answer, input);
 
-			int ball = interSection.size();
-			int strike = 0;
-
-			System.out.println("answer: " + answer);
-			for(int i=0; i<getDigits(); i++){
-				if(answer.get(i).equals(input.charAt(i))) {
-					strike++;
-				}
-			}
-			ball -= strike;
-
-			System.out.println(strike+"S"+" "+ball+"B");
-
-			if(strike == getDigits()){
+			if(gameResult.getStrike() == getDigits()){
 				return true;
 			}
 		}
 		catch (NumberFormatException e){
 			System.out.println("The input is not a number. Please check again.");
+			setGameCount(getGameCount() + 1);
+		}
+		catch(IllegalArgumentException e){
+			System.out.println("The input's digits does not match. Please check again.");
 			setGameCount(getGameCount() + 1);
 		}
 		catch (IOException e) {
