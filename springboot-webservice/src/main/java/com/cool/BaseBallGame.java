@@ -14,10 +14,7 @@ import java.util.stream.Collectors;
 abstract class Game{
 	@Setter
 	@Getter
-    private int gameCount = 5;
-	@Setter
-	@Getter
-	private int digits = 3;
+    private int gameCount = 5, digits = 3;
 	public String answer;
 
 	abstract void startGame() throws Exception;
@@ -36,9 +33,7 @@ class BaseBallGame extends Game {
 	@AllArgsConstructor
 	public class GameResult{
 		@Getter
-		private int strike;
-		@Getter
-		private int ball;
+		private int strike, ball;
 
 		@Override
 		public String toString() {
@@ -78,7 +73,6 @@ class BaseBallGame extends Game {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			String input = br.readLine();
-
 			if(input.length() != getDigits()) {
 				throw new IllegalArgumentException();
 			}
@@ -112,7 +106,6 @@ class BaseBallGame extends Game {
 
 		int ball = interSection.size();
 		int strike = 0;
-
 		//System.out.println("answer: " + given);
 		for(int i=0; i<getDigits(); i++){
 			if(given.charAt(i) == (input.charAt(i))) {
@@ -120,7 +113,6 @@ class BaseBallGame extends Game {
 			}
 		}
 		ball -= strike;
-
 		return new GameResult(strike,ball);
 	}
 }
@@ -131,7 +123,6 @@ class Play {
 		try {
 			Game game = new BaseBallGame(5,3);
 			game.startGame();
-
 		} catch (Exception e){
 			e.printStackTrace();
 		}
