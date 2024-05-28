@@ -1,4 +1,5 @@
 package com.cool;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 
@@ -7,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BaseBallGameTest {
 
     @Test
+    @DisplayName("6자리")
     public void testcase_digits6() {
         BaseBallGame game = new BaseBallGame();
         game.setDigits(6);
