@@ -1,5 +1,6 @@
 package com.cool.web.domain.post;
 
+import com.cool.web.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter  // ⑥
 @NoArgsConstructor  // ⑤
 @Entity  // ①
-public class Posts {
+public class Posts extends BaseTimeEntity {
 
     @Id  // ②
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // ③
@@ -28,5 +29,10 @@ public class Posts {
         this.title=title;
         this.content=content;
         this.author=author;
+    }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
     }
 }

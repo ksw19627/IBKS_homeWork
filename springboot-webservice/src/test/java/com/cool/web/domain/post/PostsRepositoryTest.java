@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,10 +30,12 @@ public class PostsRepositoryTest {
         //given
         String title = "테스트 제목";
         String content = "테스트 본문";
+        String author = "테스트 저자";
 
         postsRepository.save(Posts.builder()
                 .title(title)
                 .content(content)
+                .author(author)
                 .build());
 
         //when
@@ -43,4 +46,7 @@ public class PostsRepositoryTest {
         assertThat(posts.getTitle());
         assertThat(posts.getContent()).isEqualTo(content);
     }
+
+
+
 }
