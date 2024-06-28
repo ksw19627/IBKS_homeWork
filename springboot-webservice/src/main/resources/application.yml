@@ -3,3 +3,4 @@ spring:
     properties:
       hibernate:
         show_sql: true
+server.servlet.encoding.force-response: true

@@ -2,11 +2,15 @@ package com.cool.service;
 
 import com.cool.web.domain.post.Posts;
 import com.cool.web.domain.post.PostsRepository;
-import com.cool.web.dto.PostsResponseDto;
-import com.cool.web.dto.PostsSaveRequestDto;
-import jakarta.transaction.Transactional;
+import com.cool.web.dto.PostsDto;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 @Service
@@ -14,23 +18,40 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     @Transactional
-    public Long save(PostsSaveRequestDto postsSaveRequestDto){
-        return postsRepository.save(postsSaveRequestDto.toEntity()).getId();
+    public Long insert(PostsDto postsDto){
+        return postsRepository.save(postsDto.toEntity()).getId();
     }
 
-    public PostsResponseDto findById(Long id){
-        Posts entity = postsRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 없습니다. id" + id)
-        );
-        return new PostsResponseDto(entity);
+    @Transactional
+    public Long update(Long id, PostsDto postsDto){
+        Posts post = select(id);
+        post.update(postsDto);
+
+        return post.getId();
     }
 
-    public Long update(Long id, PostsSaveRequestDto requestDto){
-        Posts entity = postsRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 없습니다. id" + id)
-        );
-        entity.update(requestDto.getTitle(), requestDto.getContent());
-
+    @Transactional
+    public Long delete(Long id) {
+        postsRepository.deleteById(id);
         return id;
+    }
+
+    @Transactional(readOnly = true)
+    public Posts select(Long id) {
+        return  postsRepository.findById(id).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsDto> selectListSort() {
+        return postsRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
+                .map(PostsDto::new)  // .map( post -> new PostsListResponseDto(post) )
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsDto> selectListDesc() {
+        return postsRepository.selectListDesc().stream()
+                .map(PostsDto::new)  // .map( post -> new PostsListResponseDto(post) )
+                .collect(Collectors.toList());
     }
 }

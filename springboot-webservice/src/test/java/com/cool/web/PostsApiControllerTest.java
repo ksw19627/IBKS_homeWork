@@ -2,7 +2,7 @@ package com.cool.web;
 
 import com.cool.web.domain.post.Posts;
 import com.cool.web.domain.post.PostsRepository;
-import com.cool.web.dto.PostsSaveRequestDto;
+import com.cool.web.dto.PostsDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,8 +47,8 @@ public class PostsApiControllerTest {
         String expectedTitle = "title";
         String expectedContent = "content";
 
-        PostsSaveRequestDto requestDto
-                = PostsSaveRequestDto.builder()
+        PostsDto requestDto
+                = PostsDto.builder()
                 .title(expectedTitle)
                 .content(expectedContent)
                 .author("author")
@@ -76,26 +76,26 @@ public class PostsApiControllerTest {
         //given
         Posts savedPosts = postsRepository.save(
                 Posts.builder()
-                        .title("title2")
-                        .content("content2")
+                        .title("title")
+                        .content("content")
                         .author("author")
                         .build()
         );
 
         Long updateId = savedPosts.getId();
-        String newTitle = "title3";
+        String newTitle = "title";
         String newContent = "content3";
-        PostsSaveRequestDto requestDto =
-                PostsSaveRequestDto.builder()
+        PostsDto requestDto =
+                PostsDto.builder()
                         .title(newTitle)
                         .content(newContent)
                         .build();
 
         String url = "http://localhost:"+port+"/api/v1/posts/"+updateId;
-        HttpEntity<PostsSaveRequestDto> requestEntity = new HttpEntity<>(requestDto);
+        HttpEntity<PostsDto> requestEntity = new HttpEntity<>(requestDto);
 
         //when
-        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Long.class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
