@@ -1,8 +1,13 @@
 spring:
+  session:
+    store-type: jdbc
   profiles:
     include: oauth
   jpa:
     properties:
       hibernate:
         show_sql: true
-server.servlet.encoding.force-response: true
+server:
+  servlet:
+    encoding:
+      force-response: true

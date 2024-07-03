@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.cool.web.domain.post.Posts;
-import com.cool.service.PostsService;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import com.cool.service.PostsService;
+import com.cool.config.auth.SessionUser;
+import com.cool.config.auth.LoginUser;
+import com.cool.web.domain.post.Posts;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,9 +18,18 @@ public class IndexController {
     private final PostsService postsService;
 
     @GetMapping("/")
-    public String index(){
+    public String index(Model model, @LoginUser SessionUser sessionUser){
+        model.addAttribute("posts", postsService.selectListDesc());
+        if(sessionUser!=null){
+            model.addAttribute("userName", sessionUser.getName());
+        }
         return "index";
     }
+
+//    @GetMapping("/")
+//    public String index(){
+//        return "index";
+//    }
 
     @GetMapping("/posts/save")
     public String save(){
